@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>แจ้งซ่อมชุมชน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#12343b;--mut:#5b7075;--bg:#f3f6f5;--card:#fff;--line:#d5e0de;--sig:#f2c230;--sigink:#3a2d00;
+--new:#d9534f;--doing:#e08a00;--done:#2a8f5b;--rej:#7a8689;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#e4efee;--mut:#9bb0b3;--bg:#0f1f22;--card:#172c30;--line:#2a4448;--sigink:#2a2000}}
+:root[data-theme="dark"]{--ink:#e4efee;--mut:#9bb0b3;--bg:#0f1f22;--card:#172c30;--line:#2a4448;--sigink:#2a2000}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "IBM Plex Sans Thai Looped",system-ui,sans-serif}
+header{background:var(--ink);color:var(--bg);padding:14px 16px}
+header .in,main{max-width:960px;margin:0 auto}
+header .in{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+h1{font-size:1.25rem;margin:0;font-weight:700;display:flex;align-items:center;gap:10px}
+h1 i{display:inline-block;width:14px;height:28px;background:repeating-linear-gradient(135deg,var(--sig) 0 6px,#222 6px 12px);border-radius:2px}
+.seg{display:flex;background:rgba(255,255,255,.14);border-radius:8px;padding:3px}
+.seg button{border:0;background:none;color:inherit;font:inherit;font-size:.9rem;padding:4px 12px;border-radius:6px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--sig);color:var(--sigink);font-weight:500}
+nav{display:flex;gap:4px;max-width:960px;margin:14px auto 0;padding:0 12px;overflow-x:auto}
+nav button{flex:1;min-width:max-content;border:0;border-bottom:3px solid transparent;background:none;color:var(--mut);font:inherit;font-weight:500;padding:8px 12px;cursor:pointer}
+nav button[aria-selected=true]{color:var(--ink);border-color:var(--sig)}
+main{padding:14px 12px 40px}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.row:focus-visible{outline:3px solid var(--sig);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+select,input,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+.bar select,.bar input{width:auto;flex:1;min-width:130px}
+.row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-left:6px solid var(--c);border-radius:8px;background:var(--card);margin-bottom:8px;cursor:pointer}
+.row b{display:block}.row small{color:var(--mut)}
+.badge{font-size:.8rem;font-weight:500;color:#fff;background:var(--c);padding:2px 10px;border-radius:99px;white-space:nowrap}
+.s-new{--c:var(--new)}.s-doing{--c:var(--doing)}.s-done{--c:var(--done)}.s-rej{--c:var(--rej)}
+.u{font-size:.8rem;border:1px solid var(--line);border-radius:6px;padding:0 6px;color:var(--mut)}.u.hi{border-color:var(--new);color:var(--new)}
+.ico{font-size:1.5rem}
+label{display:block;font-weight:500;margin:12px 0 4px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.g2{grid-template-columns:1fr}.row{grid-template-columns:auto 1fr}.row .badge{grid-column:2;justify-self:start}}
+.btn{border:0;background:var(--sig);color:var(--sigink);font:inherit;font-weight:700;padding:10px 20px;border-radius:8px;cursor:pointer}
+.btn.alt{background:none;border:1px solid var(--line);color:var(--ink);font-weight:500}
+svg.map{width:100%;height:auto;border-radius:8px;background:var(--bg);border:1px solid var(--line);cursor:crosshair;display:block}
+svg.map .blk{fill:var(--line)}svg.map .rd{stroke:var(--card);stroke-width:14;stroke-linecap:round}svg.map text{fill:var(--mut);font-size:10px}
+.pin{cursor:pointer}.pin circle{stroke:#fff;stroke-width:2}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.85rem;color:var(--mut);margin-top:8px}
+.legend span:before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c);margin-right:6px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.stat b{font-size:1.8rem;display:block;line-height:1.2}.stat{border-top:5px solid var(--c)}
+.hb{display:grid;grid-template-columns:90px 1fr 30px;gap:8px;align-items:center;margin:6px 0}
+.hb div div{height:14px;background:var(--sig);border-radius:3px}
+dialog{border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);width:min(560px,94vw);padding:18px;max-height:90vh}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+.tl{list-style:none;margin:10px 0;padding:0 0 0 14px;border-left:3px solid var(--line)}
+.tl li{margin:0 0 10px;padding-left:10px}.tl small{color:var(--mut);display:block}
+.pv{max-width:100%;max-height:180px;border-radius:8px;margin-top:8px}
+.stars button{background:none;border:0;font-size:1.8rem;cursor:pointer;color:var(--sig)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+.msgs{display:flex;flex-direction:column;gap:8px;margin:8px 0;max-height:220px;overflow:auto}.m{max-width:85%;padding:8px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--line)}.m small{display:block;color:var(--mut);font-size:.75rem}.m.me{align-self:flex-end;background:var(--sig);color:var(--sigink);border-color:var(--sig)}.m.me small{color:var(--sigink);opacity:.7}.send{display:flex;gap:8px}.send input{flex:1}
+.chip{border:1px solid rgba(255,255,255,.35);background:none;color:inherit;font:inherit;font-size:.85rem;border-radius:8px;padding:4px 10px;cursor:pointer}#bn{background:var(--new);color:#fff;border-radius:99px;font-size:.7rem;padding:0 6px;margin-left:4px}#bn:empty{display:none}
+.empty{text-align:center;color:var(--mut);padding:30px 10px}
+</style>
+</head>
+<body>
+<header><div class="in">
+<h1><i></i>แจ้งซ่อมชุมชน</h1>
+<div style="display:flex;gap:6px"><button class="chip" id="bell" aria-label="การแจ้งเตือน">🔔<span id="bn"></span></button><button class="chip" id="me"></button><button class="chip" id="th" aria-label="สลับธีมสว่าง/มืด">◐</button></div></div></header>
+<nav role="tablist">
+<button role="tab" data-tab="list" aria-selected="true">รายการแจ้ง</button>
+<button role="tab" data-tab="new" aria-selected="false">แจ้งปัญหา</button>
+<button role="tab" data-tab="map" aria-selected="false">แผนที่</button>
+<button role="tab" data-tab="dash" aria-selected="false">สรุปภาพรวม</button>
+</nav>
+<main>
+<section id="list"></section>
+<section id="new" hidden></section>
+<section id="map" hidden></section>
+<section id="dash" hidden></section>
+</main>
+<dialog id="dlg"></dialog>
+<div class="toast" id="toast"></div>
+<script>
+const CATS={ไฟฟ้า:"💡",ประปา:"🚰",ถนนและทางเท้า:"🚧",ขยะ:"🗑️",ความปลอดภัย:"🚨","อื่น ๆ":"🔧"};
+const ST={new:"รอรับเรื่อง",doing:"กำลังดำเนินการ",done:"เสร็จสิ้น",rej:"ปฏิเสธ"};
+const URG={low:"ไม่เร่งด่วน",mid:"ปกติ",hi:"เร่งด่วน"};
+const TECH=["ช่างสมชาย","ช่างวิภา","ช่างประสิทธิ์"];
+const COL={new:"#d9534f",doing:"#e08a00",done:"#2a8f5b",rej:"#7a8689"};
+const H=36e5,D=24*H,now=Date.now();
+const KEY="repair-demo-v1";
+const ACC=[{n:"สมหญิง",r:"user"},{n:"สมชัย",r:"user"},{n:"ช่างสมชาย",r:"tech"},{n:"แอดมิน",r:"admin"}],RN={user:"ผู้แจ้ง",tech:"ช่าง",admin:"แอดมิน"},U={hi:0,mid:1,low:2};
+let me=ACC[0];try{me=JSON.parse(localStorage.getItem(KEY+"u"))||me}catch(e){}
+let NB={n:[{t:now-D,id:1,f:"owner",o:"สมหญิง",x:"ช่างสมชายรับงานแล้ว"},{t:now-H,id:2,f:"staff",x:"เรื่องใหม่: ท่อน้ำรั่วริมถนน"}],s:{}};try{NB=JSON.parse(localStorage.getItem(KEY+"n"))||NB}catch(e){}
+let role=me.r,tab="list",draft={x:null,y:null,img:null},filt={s:"",c:"",q:"",m:false,o:"new"};
+const seed=()=>[
+{id:1,cat:"ไฟฟ้า",title:"ไฟถนนหน้าปากซอย 3 ดับ",desc:"ดับมา 3 วันแล้ว ซอยมืดมาก",urg:"hi",place:"ปากซอย 3",x:90,y:150,status:"doing",tech:TECH[0],t:now-2*D,log:[{s:"new",t:now-2*D,n:"แจ้งเรื่อง"},{s:"doing",t:now-D,n:"ช่างสมชายรับงาน"}],msgs:[{w:"staff",t:now-D,x:"รับเรื่องแล้วครับ ขอทราบว่าเสาไฟต้นไหน มีเลขเสาไหม"},{w:"user",t:now-D+H,x:"เสาต้นที่สองจากปากซอย ไม่มีเลขครับ"}]},
+{id:2,cat:"ประปา",title:"ท่อน้ำรั่วริมถนน",desc:"น้ำไหลตลอดเวลา พื้นถนนเป็นหลุม",urg:"hi",place:"หน้าร้านค้าชุมชน",x:250,y:90,status:"new",tech:"",t:now-5*H,log:[{s:"new",t:now-5*H,n:"แจ้งเรื่อง"}]},
+{id:3,cat:"ขยะ",title:"ถังขยะเต็มล้นมา 2 วัน",desc:"มีกลิ่นและแมลงวัน",urg:"mid",place:"จุดทิ้งขยะหลังตลาด",x:320,y:200,status:"done",tech:TECH[1],t:now-6*D,rating:4,log:[{s:"new",t:now-6*D,n:"แจ้งเรื่อง"},{s:"doing",t:now-5*D,n:"ช่างวิภารับงาน"},{s:"done",t:now-4*D,n:"เก็บขยะแล้ว"}]},
+{id:4,cat:"ถนนและทางเท้า",title:"พื้นทางเท้าแตก เดินสะดุด",desc:"ผู้สูงอายุเดินผ่านบ่อย",urg:"mid",place:"ข้างศาลาประชาคม",x:170,y:60,status:"new",tech:"",t:now-D,log:[{s:"new",t:now-D,n:"แจ้งเรื่อง"}]},
+{id:5,cat:"ความปลอดภัย",title:"ขอติดกระจกโค้งตรงสี่แยก",desc:"มองไม่เห็นรถที่ตัดมา",urg:"low",place:"สี่แยกกลางหมู่บ้าน",x:200,y:130,status:"rej",tech:"",t:now-8*D,log:[{s:"new",t:now-8*D,n:"แจ้งเรื่อง"},{s:"rej",t:now-7*D,n:"อยู่นอกพื้นที่รับผิดชอบ ให้ติดต่อ อบต."}]}];
+let data;
+try{data=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!Array.isArray(data))data=seed();
+data.forEach(r=>r.owner=r.owner||(r.id%2?"สมหญิง":"สมชัย"));
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data));localStorage.setItem(KEY+"n",JSON.stringify(NB))}catch(e){}};
+const ev=(r,f,x)=>NB.n.push({t:Date.now(),id:r.id,f,o:r.owner,x});
+const mine=()=>NB.n.filter(e=>role==="user"?e.f==="owner"&&e.o===me.n:e.f==="staff").sort((a,b)=>b.t-a.t);
+const twoStep=(b,fn)=>{if(b)b.onclick=()=>{if(b.dataset.c)fn();else{b.dataset.c=1;b.textContent="กดอีกครั้งเพื่อยืนยัน"}}};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=t=>new Date(t).toLocaleString("th-TH",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
+const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2200)};
+
+function mapSvg(pins,pick){
+ let p=pins.map(r=>`<g class="pin" data-id="${r.id}" tabindex="0"><circle cx="${r.x}" cy="${r.y}" r="9" fill="${COL[r.status]}"/><text x="${r.x}" y="${r.y+3.5}" text-anchor="middle" style="fill:#fff;font-size:9px;font-weight:700">${r.id}</text></g>`).join("");
+ if(pick&&draft.x!=null)p+=`<circle cx="${draft.x}" cy="${draft.y}" r="10" fill="#f2c230" stroke="#12343b" stroke-width="3"/>`;
+ return `<svg class="map" viewBox="0 0 400 260" role="img" aria-label="แผนผังชุมชน">
+<line class="rd" x1="10" y1="130" x2="390" y2="130"/><line class="rd" x1="200" y1="10" x2="200" y2="250"/><line class="rd" x1="60" y1="20" x2="60" y2="240"/>
+<rect class="blk" x="80" y="20" width="100" height="90" rx="4"/><rect class="blk" x="220" y="20" width="150" height="90" rx="4"/>
+<rect class="blk" x="80" y="150" width="100" height="90" rx="4"/><rect class="blk" x="220" y="150" width="150" height="90" rx="4"/>
+<text x="130" y="68" text-anchor="middle">ศาลาประชาคม</text><text x="295" y="68" text-anchor="middle">ร้านค้าชุมชน</text>
+<text x="130" y="198" text-anchor="middle">ที่พักอาศัย</text><text x="295" y="198" text-anchor="middle">ตลาด</text>${p}</svg>`;
+}
+function bindMap(el,pick){
+ const svg=el.querySelector("svg");
+ svg.addEventListener("click",e=>{
+  const g=e.target.closest(".pin");
+  if(g){openDetail(+g.dataset.id);return}
+  if(!pick)return;
+  const b=svg.getBoundingClientRect();
+  draft.x=Math.round((e.clientX-b.left)/b.width*400);draft.y=Math.round((e.clientY-b.top)/b.height*260);
+  svg.outerHTML=mapSvg([],true);bindMap(el,true);
+ });
+ svg.addEventListener("keydown",e=>{const g=e.target.closest(".pin");if(g&&e.key==="Enter")openDetail(+g.dataset.id)});
+}
+const legend=()=>`<div class="legend">${Object.keys(ST).map(k=>`<span class="s-${k}" style="--c:${COL[k]}">${ST[k]}</span>`).join("")}</div>`;
+
+function renderList(){
+ const rs=data.filter(r=>(!filt.s||r.status===filt.s)&&(!filt.c||r.cat===filt.c)&&(!filt.m||r.owner===me.n)&&(!filt.q||(r.title+r.place+r.desc).includes(filt.q))).sort((a,b)=>filt.o==="urg"?U[a.urg]-U[b.urg]||b.t-a.t:b.t-a.t);
+ $("#list").innerHTML=`<div class="bar">
+ <input id="q" type="search" placeholder="ค้นหาเรื่องหรือสถานที่" value="${esc(filt.q)}" aria-label="ค้นหา">
+ <select id="fs" aria-label="สถานะ"><option value="">ทุกสถานะ</option>${Object.entries(ST).map(([k,v])=>`<option value="${k}" ${filt.s===k?"selected":""}>${v}</option>`).join("")}</select>
+ <select id="so" aria-label="เรียงลำดับ"><option value="new">ใหม่สุดก่อน</option><option value="urg" ${filt.o==="urg"?"selected":""}>เร่งด่วนก่อน</option></select>
+ <label style="display:flex;gap:6px;align-items:center;margin:0;font-weight:400"><input type="checkbox" id="fm" style="width:auto" ${filt.m?"checked":""}>เรื่องของฉัน</label>
+ <select id="fc" aria-label="หมวด"><option value="">ทุกหมวด</option>${Object.keys(CATS).map(k=>`<option ${filt.c===k?"selected":""}>${k}</option>`).join("")}</select></div>`
+ +(rs.length?rs.map(r=>`<div class="row s-${r.status}" tabindex="0" data-id="${r.id}"><span class="ico">${CATS[r.cat]}</span>
+ <div><b>${esc(r.title)}</b><small>${esc(r.place)} · ${esc(r.owner)} · ${fmt(r.t)}${(r.msgs||[]).length?` · 💬 ${r.msgs.length}`:""} <span class="u ${r.urg==="hi"?"hi":""}">${URG[r.urg]}</span></small></div>
+ <span class="badge">${ST[r.status]}</span></div>`).join(""):`<div class="empty">ไม่พบรายการที่ตรงกับตัวกรอง ลองล้างคำค้นหาหรือเปลี่ยนสถานะ</div>`);
+ $("#q").oninput=e=>{filt.q=e.target.value;const p=e.target.selectionStart;renderList();const q=$("#q");q.focus();q.setSelectionRange(p,p)};
+ $("#fs").onchange=e=>{filt.s=e.target.value;renderList()};
+ $("#so").onchange=e=>{filt.o=e.target.value;renderList()};$("#fm").onchange=e=>{filt.m=e.target.checked;renderList()};
+ $("#fc").onchange=e=>{filt.c=e.target.value;renderList()};
+ document.querySelectorAll(".row").forEach(el=>{el.onclick=()=>openDetail(+el.dataset.id);el.onkeydown=e=>{if(e.key==="Enter")openDetail(+el.dataset.id)}});
+}
+function renderNew(){
+ $("#new").innerHTML=`<div class="card"><form id="f" onsubmit="return false">
+ <div class="g2"><div><label for="cat">หมวดปัญหา</label><select id="cat">${Object.keys(CATS).map(k=>`<option>${k}</option>`).join("")}</select></div>
+ <div><label for="urg">ความเร่งด่วน</label><select id="urg"><option value="mid">ปกติ</option><option value="hi">เร่งด่วน</option><option value="low">ไม่เร่งด่วน</option></select></div></div>
+ <label for="title">หัวข้อ</label><input id="title" maxlength="80" placeholder="เช่น ไฟถนนหน้าบ้านเลขที่ 12 ดับ">
+ <label for="desc">รายละเอียด</label><textarea id="desc" rows="3" placeholder="เกิดขึ้นเมื่อไหร่ ส่งผลอย่างไร"></textarea>
+ <label for="place">สถานที่ / ห้อง</label><input id="place" placeholder="เช่น ปากซอย 3 หรือ ห้อง 204 ชั้น 2">
+ <label>ปักหมุดบนแผนผัง <small style="font-weight:400;color:var(--mut)">(แตะตำแหน่งที่เกิดเหตุ)</small></label>
+ <div id="pm">${mapSvg([],true)}</div>
+ <label for="img">รูปภาพ</label><input id="img" type="file" accept="image/*"><div id="pvw"></div>
+ <p id="err" style="color:var(--new);min-height:1.4em;margin:10px 0 0" role="alert"></p>
+ <button class="btn" id="go">ส่งเรื่องแจ้งซ่อม</button></form></div>`;
+ bindMap($("#pm"),true);
+ $("#img").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,480/i.width),c=document.createElement("canvas");c.width=i.width*k;c.height=i.height*k;c.getContext("2d").drawImage(i,0,0,c.width,c.height);draft.img=c.toDataURL("image/jpeg",.7);$("#pvw").innerHTML=`<img class="pv" src="${draft.img}" alt="ตัวอย่างรูป">`};i.src=r.result};r.readAsDataURL(f)};
+ $("#go").onclick=()=>{
+  const title=$("#title").value.trim(),place=$("#place").value.trim();
+  if(!title||!place){$("#err").textContent="กรอกหัวข้อและสถานที่ก่อนส่งเรื่อง";return}
+  const id=Math.max(0,...data.map(r=>r.id))+1,t=Date.now();
+  data.push({id,cat:$("#cat").value,title,desc:$("#desc").value.trim(),urg:$("#urg").value,place,x:draft.x??200,y:draft.y??130,status:"new",tech:"",t,img:draft.img,owner:me.n,log:[{s:"new",t,n:"แจ้งเรื่อง"}],msgs:[]});
+  ev(data.at(-1),"staff","เรื่องใหม่: "+title);draft={x:null,y:null,img:null};save();toast("ส่งเรื่องแจ้งซ่อมแล้ว");go("list");
+ };
+}
+function renderMap(){
+ $("#map").innerHTML=`<div class="card"><div id="mm">${mapSvg(data)}</div>${legend()}</div>`;bindMap($("#mm"),false);
+}
+function renderDash(){
+ const n=k=>data.filter(r=>r.status===k).length;
+ const dn=data.filter(r=>r.status==="done"),avg=dn.length?dn.reduce((a,r)=>a+(r.log.at(-1).t-r.t),0)/dn.length/H:0;
+ const rt=data.filter(r=>r.rating),ar=rt.length?rt.reduce((a,r)=>a+r.rating,0)/rt.length:0;
+ const cm=Math.max(1,...Object.keys(CATS).map(c=>data.filter(r=>r.cat===c).length));
+ $("#dash").innerHTML=`<div class="stats">${Object.keys(ST).map(k=>`<div class="card stat s-${k}"><b>${n(k)}</b>${ST[k]}</div>`).join("")}
+ <div class="card stat" style="--c:var(--sig)"><b>${avg?avg.toFixed(0):"-"}</b>ชม. เฉลี่ยที่ปิดงาน</div>
+ <div class="card stat" style="--c:var(--sig)"><b>${ar?ar.toFixed(1):"-"}</b>คะแนนความพอใจ (5)</div></div>
+ <div class="card"><b>จำนวนเรื่องแยกตามหมวด</b>${Object.keys(CATS).map(c=>{const k=data.filter(r=>r.cat===c).length;return `<div class="hb"><span>${CATS[c]} ${c}</span><div><div style="width:${k/cm*100}%"></div></div><span>${k}</span></div>`}).join("")}</div>`;
+}
+function openDetail(id){
+ const r=data.find(x=>x.id===id),d=$("#dlg"),can=role!=="user"||r.owner===me.n;
+ d.innerHTML=`<div style="display:flex;justify-content:space-between;gap:10px"><h2 style="margin:0;font-size:1.15rem">${CATS[r.cat]} ${esc(r.title)}</h2><button class="btn alt" id="x" aria-label="ปิด">ปิด</button></div>
+ <p><span class="badge s-${r.status}">${ST[r.status]}</span> <span class="u ${r.urg==="hi"?"hi":""}">${URG[r.urg]}</span></p>
+ <p>${esc(r.desc)||"ไม่มีรายละเอียดเพิ่มเติม"}</p><p><small>สถานที่: ${esc(r.place)}${r.tech?" · ผู้รับผิดชอบ: "+esc(r.tech):""}</small></p>
+ ${r.img?`<img class="pv" src="${r.img}" alt="รูปประกอบ">`:""}
+ <b>ประวัติสถานะ</b><ul class="tl">${r.log.map(l=>`<li><span class="badge s-${l.s}">${ST[l.s]}</span> ${esc(l.n)}<small>${fmt(l.t)}</small></li>`).join("")}</ul>
+ <b>ข้อความโต้ตอบ</b><div class="msgs" id="ml">${(r.msgs||[]).length?r.msgs.map(m=>`<div class="m ${m.w===(role==="user"?"user":"staff")?"me":""}"><small>${m.w==="staff"?"เจ้าหน้าที่":"ผู้แจ้ง"} · ${fmt(m.t)}</small>${esc(m.x)}</div>`).join(""):`<div class="empty" style="padding:10px">ยังไม่มีข้อความ พิมพ์ถามหรือแจ้งข้อมูลเพิ่มได้ที่นี่</div>`}</div>
+ ${can?`<div class="send"><input id="mi" maxlength="200" placeholder="${role!=="user"?"ตอบผู้แจ้ง":"เพิ่มข้อมูลหรือสอบถามเจ้าหน้าที่"}" aria-label="ข้อความ"><button class="btn" id="ms">ส่ง</button></div>`:`<p><small>ดูได้อย่างเดียว เพราะไม่ใช่เรื่องของคุณ</small></p>`}
+ ${role!=="user"?`<div class="g2"><div><label for="ns">เปลี่ยนสถานะ</label><select id="ns">${Object.entries(ST).map(([k,v])=>`<option value="${k}" ${r.status===k?"selected":""}>${v}</option>`).join("")}</select></div>
+ ${role==="admin"?`<div><label for="nt">มอบหมายช่าง</label><select id="nt"><option value="">ยังไม่มอบหมาย</option>${TECH.map(t=>`<option ${r.tech===t?"selected":""}>${t}</option>`).join("")}</select></div>`:""}</div>
+ <label for="nn">บันทึก / เหตุผล</label><input id="nn" placeholder="เช่น เปลี่ยนหลอดไฟแล้ว"><p></p><button class="btn" id="sv">บันทึกสถานะ</button> ${role==="admin"?`<button class="btn alt" id="dl">ลบเรื่อง</button>`:""}`
+ :r.status==="done"&&!r.rating&&can?`<b>ให้คะแนนความพอใจ</b><div class="stars">${[1,2,3,4,5].map(i=>`<button data-r="${i}" aria-label="${i} ดาว">☆</button>`).join("")}</div>`
+ :r.rating?`<p>คะแนนความพอใจ: ${"★".repeat(r.rating)}${"☆".repeat(5-r.rating)}</p>`:""}
+ ${role==="user"&&can&&r.status==="new"?`<p><button class="btn alt" id="cn">ยกเลิกเรื่องนี้</button></p>`:""}`;
+ if(!d.open)d.showModal();$("#x").onclick=()=>d.close();
+ const ml=$("#ml");ml.scrollTop=ml.scrollHeight;
+ const sendMsg=()=>{const v=$("#mi").value.trim();if(!v)return;(r.msgs=r.msgs||[]).push({w:role==="user"?"user":"staff",t:Date.now(),x:v});ev(r,role==="user"?"staff":"owner","ข้อความใหม่: "+v.slice(0,40));save();openDetail(id);$("#mi").focus();if(tab==="list")renderList()};
+ if($("#ms")){$("#ms").onclick=sendMsg;$("#mi").onkeydown=e=>{if(e.key==="Enter")sendMsg()}}
+ const sv=$("#sv");if(sv)sv.onclick=()=>{
+  const s=$("#ns").value,nt=$("#nt"),tech=nt?nt.value:r.tech,n=$("#nn").value.trim();
+  if(s==="rej"&&!n){toast("ใส่เหตุผลที่ปฏิเสธก่อนบันทึก");return}
+  if(s!==r.status||n||tech!==r.tech)r.log.push({s,t:Date.now(),n:n||(tech&&tech!==r.tech?"มอบหมายให้ "+tech:"อัปเดตสถานะ")});
+  if(s!==r.status)ev(r,"owner","สถานะเปลี่ยนเป็น "+ST[s]);else if(tech!==r.tech)ev(r,"owner","มอบหมายช่างแล้ว");r.status=s;r.tech=tech;save();d.close();toast("บันทึกสถานะแล้ว");render();
+ };
+ d.querySelectorAll(".stars button").forEach(b=>{b.onmouseenter=()=>d.querySelectorAll(".stars button").forEach(x=>x.textContent=+x.dataset.r<=+b.dataset.r?"★":"☆");b.onclick=()=>{r.rating=+b.dataset.r;save();d.close();toast("ขอบคุณสำหรับคะแนน");render()}});
+ twoStep($("#dl"),()=>{data=data.filter(x=>x.id!==id);save();d.close();toast("ลบเรื่องแล้ว");render()});
+ twoStep($("#cn"),()=>{r.status="rej";r.log.push({s:"rej",t:Date.now(),n:"ผู้แจ้งยกเลิกเอง"});ev(r,"staff","ผู้แจ้งยกเลิกเรื่อง #"+id);save();d.close();toast("ยกเลิกเรื่องแล้ว");render()});
+}
+const R={list:renderList,new:renderNew,map:renderMap,dash:renderDash};
+function bar(){$("#me").textContent=me.n+" ("+RN[role]+")";const u=mine().filter(e=>e.t>(NB.s[me.n]||0)).length;$("#bn").textContent=u||""}
+function render(){R[tab]();bar()}
+function go(t){tab=t;document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t));
+ Object.keys(R).forEach(k=>$("#"+k).hidden=k!==t);render()}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>go(b.dataset.tab));
+$("#me").onclick=()=>{const d=$("#dlg");d.innerHTML=`<h2 style="margin:0 0 10px;font-size:1.15rem">เลือกผู้ใช้ (บัญชีทดลอง)</h2>${ACC.map((a,i)=>`<button class="btn alt" data-a="${i}" style="display:block;width:100%;margin-bottom:8px;text-align:left">${a.n} — ${RN[a.r]}</button>`).join("")}<p><small style="color:var(--mut)">ผู้แจ้งโพสต์ ให้คะแนน และยกเลิกเรื่องของตนเอง ช่างอัปเดตสถานะ แอดมินมอบหมายและลบเรื่อง</small></p><button class="btn alt" id="x">ปิด</button>`;d.showModal();$("#x").onclick=()=>d.close();
+ d.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{me=ACC[+b.dataset.a];role=me.r;filt.m=false;try{localStorage.setItem(KEY+"u",JSON.stringify(me))}catch(e){}d.close();toast("เข้าสู่ระบบเป็น "+me.n);render()})};
+$("#bell").onclick=()=>{const d=$("#dlg"),l=mine();NB.s[me.n]=Date.now();save();d.innerHTML=`<div style="display:flex;justify-content:space-between"><h2 style="margin:0;font-size:1.15rem">การแจ้งเตือน</h2><button class="btn alt" id="x">ปิด</button></div>${l.length?l.map(e=>`<p><button class="btn alt" style="width:100%;text-align:left" data-id="${e.id}">#${e.id} ${esc(e.x)}<small style="display:block;color:var(--mut)">${fmt(e.t)}</small></button></p>`).join(""):`<div class="empty">ยังไม่มีการแจ้งเตือน</div>`}`;d.showModal();$("#x").onclick=()=>d.close();d.querySelectorAll("[data-id]").forEach(b=>b.onclick=()=>openDetail(+b.dataset.id));bar()};
+$("#th").onclick=()=>{const h=document.documentElement,dk=getComputedStyle(h).getPropertyValue("--bg").trim()==="#0f1f22";h.dataset.theme=dk?"light":"dark"};
+go("list");
+</script>
+</body>
+</html>
